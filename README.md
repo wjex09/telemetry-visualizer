@@ -1,70 +1,153 @@
-# Getting Started with Create React App
+# Telemetry VisualizationFrontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based frontend for visualizing OpenTelemetry metrics using uPlot for efficient time series visualization.
+
+## Features
+- Real-time metrics visualization
+- Automatic value scaling (B, M, K for large numbers)
+- Multiple chart types
+- Time range selection
+- Statistical summary (Min, Max, Avg)
+- Responsive design
+- Interactive tooltips
+
+## Setup
+
+1. Clone the repository and install dependencies:
+```bash
+git clone <repository-url>
+cd telemetry-viz
+npm install
+```
+
+2. Install required dependencies:
+```bash
+npm install uplot
+```
+
+3. Start the development server:
+```bash
+npm start
+```
+
+The application will start on http://localhost:3001
+
+## Project Structure
+```
+telemetry-viz/
+├── src/
+│   ├── components/
+│   │   └── Chart.js        # Main chart component using uPlot
+│   ├── App.js             # Main application component
+│   └── index.js           # Entry point
+├── package.json
+└── README.md
+```
 
 ## Available Scripts
 
-In the project directory, you can run:
+- `npm start` - Runs the app in development mode
+- `npm build` - Builds the app for production
+- `npm test` - Runs the test suite
+- `npm eject` - Ejects from Create React App
 
-### `npm start`
+## Chart Component Usage
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```jsx
+import Chart from './components/Chart';
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+// Example usage
+<Chart data={metricsData} />
+```
 
-### `npm test`
+The Chart component expects data in the following format:
+```javascript
+[
+  {
+    "timestamp": "2024-11-03 20:09:10",
+    "value": 48.7
+  },
+  // ...more data points
+]
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
 
-### `npm run build`
+### Value Formatting
+- Automatically formats large numbers:
+  - Billions (B): > 1,000,000,000
+  - Millions (M): > 1,000,000
+  - Thousands (K): > 1,000
+  - Regular numbers: ≤ 1,000
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Statistics Display
+Shows:
+- Minimum value
+- Maximum value
+- Average value
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Interactivity
+- Hover tooltips with formatted values
+- Responsive resizing
+- Time-based x-axis
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## API Integration
 
-### `npm run eject`
+The frontend expects a backend API running on port 3000. Ensure the backend is running before starting the frontend.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Example API endpoint:
+```
+http://localhost:3000/api/metrics/cpu.usage/data
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Environment Setup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Create a `.env` file in the root directory:
+```
+PORT=3001
+REACT_APP_API_URL=http://localhost:3000/api
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Styling
 
-## Learn More
+The project uses Tailwind CSS for styling. Main style classes:
+- Chart container: `p-4 bg-white rounded-lg shadow`
+- Statistics: `px-3 py-1 bg-blue-50 rounded-full font-mono`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Browser Support
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Supported browsers:
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
 
-### Code Splitting
+## Performance Considerations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- uPlot is used for efficient rendering of time series data
+- Data is preprocessed and formatted on the frontend
+- Automatic cleanup of chart instances to prevent memory leaks
 
-### Analyzing the Bundle Size
+## Troubleshooting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Common issues:
 
-### Making a Progressive Web App
+1. Chart not rendering
+   - Check if data is in correct format
+   - Verify uPlot is properly installed
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+2. Connection errors
+   - Verify backend is running on port 3000
+   - Check API URL in environment variables
 
-### Advanced Configuration
+3. Formatting issues
+   - Verify data values are numbers or can be converted to numbers
+   - Check for null or undefined values
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Development
 
-### Deployment
+To add new features or modify the chart:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Chart modifications in `src/components/Chart.js`
+2. Additional components in `src/components/`
+3. Main app logic in `src/App.js`
